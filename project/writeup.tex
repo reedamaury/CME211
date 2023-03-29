@@ -1,0 +1,57 @@
+\documentclass{homework}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+\title{Software Engineering for Scientists and Engineers (CME 211): Final Project}
+\author{Amaury Reed}
+
+\begin{document}
+
+\maketitle
+
+\section{Implementation of a Conjugate Gradient Solver in C++}
+The conjugate gradient (CG) method is an iterative algorithm that can be used to efficiently solve linear systems of equations of the following form: 
+\begin{equation}
+    Au = b
+\end{equation}
+where A is the coefficient matrix, u is the solution vector, and b is the right-hand side coefficient vector. The pseudo-code for the CG method can be written as follows:
+\begin{algorithm}
+\caption{Conjugate Gradient Method}
+\label{<your label for references later in your document>}
+\begin{algorithmic}
+\State initialize $u_{0}$ 
+\State $r_{0} = b - Au_{0}$ 
+\State $\|r_{0}\|_{2} = \sqrt(\sum_{i=1}^{n}|r_{i}^2|)$ 
+\State $r_{0} = p_{0}$ 
+\State niter = 0 
+\While {(niter < nitermax)} 
+    \State niter = niter + 1 
+    \State $\alpha = (r_{n}^{T}r_{n})/ (p_{n}^{T}Ap_{n})$ 
+    \State $u_{n+1} = u_{n} + \alpha_{n} p_{n}$ 
+    \State $r_{n+1} = r_{n} - \alpha_{n}Ap_{n}$ 
+    \State $\|r_{n+1}\|_{2} = \sqrt(\sum_{i=1}^{n+1}|r_{i}^2|)$ 
+    \If {$\frac{\|r_{n+1}\|_{2}}{\|r_{0}\|_{2}}$ < threshold}
+        \State break
+    \EndIf
+    \State $\beta_{n} = (r_{n+1}^{T}r_{n+1})/(r_{n}^{T}r_{n}) $ 
+    \State $p_{n+1} = r_{n+1} + \beta_{n} p_{n}$
+\EndWhile
+\end{algorithmic}
+\end{algorithm}
+
+The implementation of the CG algorithm in $C++$ required decomposition of the program into several parts, namely, a $COO$ to $CSR$ sparse matrix format conversion function, matrix-vector operation functions, the actual CG algorithm function, and the main program through which all the functions were utilized to compute solution vector, $u$. Once computed, the solution vector was written to a user designated output file. The output file name, as well as the $COO$ formatted sparse coefficient matrix, $A$, were given as command line arguments by the user. A makefile was also developed for seamless building and execution of the program. The standard library vector was the sole container used to store the matrix data and carry out necessary matrix-vector operations for this program. 
+
+The $COO$ to $CSR$ sparse matrix format conversion function takes in a $COO$ matrix and does an in-place conversion of the vectors associated with that matrix to $CSR$ format. The input files were read in using $COO$ format because it is the more intuitive, straight forward way of representing a sparse matrix. However, $CSR$ format is more amenable to matrix-vector operations, and thus, conversion to this format was necessary. In-place conversion of the matrix was possible because the row, column, and data vectors associated with the $COO$ sparse matrix were passed by reference to the function. 
+
+In order to properly implement the CG method in $C++$, basic matrix-vector operations had to be hard-coded. The following matrix-vector operation functions were developed to assist the CG function: 
+\begin{enumerate}
+\item CSR matrix-vector multiplication 
+\item vector-vector multiplication
+\item scalar-vector multiplication
+\item vector addition
+\item vector subtraction 
+\item L2 norm
+\end{enumerate}
+
+The CG function, named $CGSolver$, takes in the CSR sparse coefficient matrix obtained from the $COO2CSR$ function, as wells as an initial guess of ones for the solution vector, $u$, and zeros for the coefficient vector, $b$. As the last input argument, $CGSolver$ accepts a tolerance, which signifies the convergence of the solution vector. $CGSolver$ implements the pseudo-code given earlier in the document and returns an unsigned integer, indicating the number of iterations it took for the solution to converge. 
+\end{document}
