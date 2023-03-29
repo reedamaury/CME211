@@ -1,0 +1,6 @@
+GCT -1
+TAG 0 6
+CAT 3
+ATT 4
+TTA 5
+\n

@@ -1,0 +1,35 @@
+\documentclass{homework}
+
+\title{Software Engineering for Scientists and Engineers (CME 211): Assignment 4}
+\author{Amaury Reed}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary of Truss.py Program}
+This program takes in two arguments of the directory where the folder containing the truss data is located. 
+The folder should consists of the following data pertaining to the truss: 
+\begin{enumerate}
+\item the joint coordinates
+\item beams and the corresponding joints 
+\item support reaction forces and external forces corresponding to each joint coordinate. 
+\end{enumerate}
+The file with information corresponding to joint coordinate information should be named 
+joints.dat and the file with the beam information should be named joints.dat. Any deviations from these file names 
+will result in a runtime error. Additionally, if the directory in the command line argument does not exits, the 
+program will output a runtime error. The program computes the by beam forces by summing the forces in the in x 
+and y directions at each joint and constructing a coefficient matrix corresponding to the equations. The A matrix 
+contains the coefficients of beam forces as well as the coefficients of the support reaction forces, while the B 
+matrix contains coefficients of the external forces. It is important to note that every two rows of the dense A matrix corresponds to a 
+joint - that is the sum of the forces in the x and y directions for the joint. However, a sparse matrix was used in this program for efficiency of memory allocation. The linear system of equations is sovled using the follwing formula. 
+
+\begin{equation}
+    Ax = B
+\end{equation}
+
+If the coefficient matrix A is under- or over-defined the program will return a 
+runtime error. If an output directory argument is given, the funciton will save a plot of the truss geometry to 
+the said directory.
+
+\end{document}
